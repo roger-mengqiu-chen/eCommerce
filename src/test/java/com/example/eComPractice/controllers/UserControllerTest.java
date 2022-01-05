@@ -6,6 +6,7 @@ import com.example.eComPractice.model.persistence.repositories.CartRepository;
 import com.example.eComPractice.model.persistence.repositories.UserRepository;
 import com.example.eComPractice.model.requests.CreateUserRequest;
 import com.example.eComPractice.model.requests.LoginRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,22 +76,22 @@ public class UserControllerTest {
 
     }
     @Test
-    public void loginTest() {
+    public void loginTest() throws Exception{
         CreateUserRequest r = new CreateUserRequest();
         r.setUsername("test");
         r.setPassword("password");
         r.setPassword("password");
         userController.createUser(r);
-        String json = "{\"username\":\"test\",\"password\":\"password\"}";
 
-        try {
-            mockMvc.perform(
-                    MockMvcRequestBuilders.post("/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(json)
-            ).andExpect(status().isOk());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("test");
+        loginRequest.setPassword("password");
+        String json = new ObjectMapper().writeValueAsString(loginRequest);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isOk());
     }
 }
