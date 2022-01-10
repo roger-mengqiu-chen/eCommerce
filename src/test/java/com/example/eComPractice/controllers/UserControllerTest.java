@@ -32,14 +32,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment =  SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class UserControllerTest {
-
+    @Autowired
     private UserController userController;
-
-    private UserRepository userRepository = mock(UserRepository.class);
-
-    private CartRepository cartRepository = mock(CartRepository.class);
-
-    private BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+//
+//    private CartRepository cartRepository = mock(CartRepository.class);
+//
+//    private BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
     @Autowired
     private WebApplicationContext context;
     @Autowired
@@ -47,7 +51,7 @@ public class UserControllerTest {
 
     @Before
     public void setup() throws NoSuchFieldException, IllegalAccessException {
-        userController = new UserController();
+
         TestUtils.injectObjects(userController, "userRepository", userRepository);
         TestUtils.injectObjects(userController, "cartRepository", cartRepository);
         TestUtils.injectObjects(userController, "bCryptPasswordEncoder", encoder);
@@ -55,7 +59,7 @@ public class UserControllerTest {
 
     @Test
     public void create_user_happy_path() throws Exception {
-        when(encoder.encode("testpassword")).thenReturn("testpassword");
+       // when(encoder.encode("testpassword")).thenReturn("testpassword");
 
         CreateUserRequest r = new CreateUserRequest();
         r.setUsername("test");
@@ -69,18 +73,18 @@ public class UserControllerTest {
 
         User u = response.getBody();
         assertNotNull(u);
-        assertEquals(0, u.getId());
+        assertEquals(1, u.getId());
         assertEquals("test", u.getUsername());
         assertEquals("testpassword", u.getPassword());
-
 
     }
     @Test
     public void loginTest() throws Exception{
+       // when(encoder.encode("password")).thenReturn("password");
         CreateUserRequest r = new CreateUserRequest();
         r.setUsername("test");
         r.setPassword("password");
-        r.setPassword("password");
+        r.setConfirmPassword("password");
         userController.createUser(r);
 
         LoginRequest loginRequest = new LoginRequest();
