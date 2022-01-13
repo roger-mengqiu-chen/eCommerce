@@ -35,15 +35,11 @@ public class UserControllerTest {
     @Autowired
     private UserController userController;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-//
-//    private CartRepository cartRepository = mock(CartRepository.class);
-//
-//    private BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+    private UserRepository userRepository = mock(UserRepository.class);
+
+    private CartRepository cartRepository = mock(CartRepository.class);
+
+    private BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
     @Autowired
     private WebApplicationContext context;
     @Autowired
@@ -59,7 +55,7 @@ public class UserControllerTest {
 
     @Test
     public void create_user_happy_path() throws Exception {
-       // when(encoder.encode("testpassword")).thenReturn("testpassword");
+        when(encoder.encode("testpassword")).thenReturn("testpassword");
 
         CreateUserRequest r = new CreateUserRequest();
         r.setUsername("test");
@@ -78,24 +74,5 @@ public class UserControllerTest {
         assertEquals("testpassword", u.getPassword());
 
     }
-    @Test
-    public void loginTest() throws Exception{
-       // when(encoder.encode("password")).thenReturn("password");
-        CreateUserRequest r = new CreateUserRequest();
-        r.setUsername("test");
-        r.setPassword("password");
-        r.setConfirmPassword("password");
-        userController.createUser(r);
 
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("test");
-        loginRequest.setPassword("password");
-        String json = new ObjectMapper().writeValueAsString(loginRequest);
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
-        ).andExpect(status().isOk());
-    }
 }
