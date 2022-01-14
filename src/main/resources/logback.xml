@@ -1,0 +1,17 @@
+<configuration debug="true">
+    <appender name="FileLogger" class="ch.qos.logback.core.FileAppender" target="System.err">
+        <file>app.log</file>
+        <encoder>
+            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ConsoleLogger" class="ch.qos.logback.core.ConsoleAppender" target="System.err">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="ConsoleLogger" />
+        <appender-ref ref="FileLogger" />
+    </root>
+</configuration>
